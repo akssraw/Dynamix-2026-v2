@@ -1,4 +1,4 @@
-mport { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Zap, ArrowUp } from 'lucide-react'
 
@@ -480,10 +480,63 @@ export default function App() {
           <div className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
             <div className="text-center p-6 max-w-5xl mx-auto relative z-10 flex flex-col items-center justify-center">
               
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00fa6c]/5 border border-[#00fa6c]/20 mb-10 backdrop-blur-md">
-                <Zap className="h-3.5 w-3.5 text-[#00fa6c] animate-pulse" />
-                <span className="text-xs font-mono font-medium tracking-widest text-[#00fa6c] uppercase">System Verified</span>
-              </motion.div>
+              <motion.div
+  initial={{ opacity: 0, y: -10 }}
+  animate={{
+    opacity: 1,
+    y: [0, -5, 0],
+  }}
+  transition={{
+    opacity: { duration: 0.8 },
+    y: {
+      duration: 3.8,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+  }}
+  className="mb-10"
+>
+  <div className="relative inline-flex items-center justify-center">
+
+    {/* Cyan Glow */}
+    <div className="absolute inset-0 blur-3xl bg-cyan-400/20 rounded-full scale-150" />
+
+    {/* Pink Glow */}
+    <div className="absolute inset-0 blur-3xl bg-fuchsia-500/15 rounded-full scale-125" />
+
+    <span
+      className="text-[42px] leading-none font-black tracking-[-0.08em]"
+      style={{
+        fontFamily: "'Orbitron', sans-serif",
+        color: "#fff",
+        textShadow: `
+          0 0 6px #ffffff,
+          0 0 18px rgba(255,255,255,.8),
+          0 0 32px rgba(255,255,255,.45)
+        `,
+      }}
+    >
+      ワ
+    </span>
+
+    <span
+      className="text-[42px] leading-none font-black tracking-[-0.08em]"
+      style={{
+        fontFamily: "'Orbitron', sans-serif",
+        color: "#00fa6c",
+        textShadow: `
+          0 0 6px #00fa6c,
+          0 0 18px #00fa6c,
+          0 0 36px rgba(0,250,108,.9),
+          0 0 60px rgba(0,250,108,.45)
+        `,
+      }}
+    >
+      メ
+    </span>
+
+  </div>
+</motion.div>
 
               <motion.div 
                 initial={{ opacity: 0, y: 15 }} 
