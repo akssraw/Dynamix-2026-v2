@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyber-black: #050507;
+  --color-matrix-green: #00fa6c;
+  --color-matrix-dim: #003316;
+}
+
+body {
+  background-color: #050507;
+  color: #f3f4f6;
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* 🧪 Glassmorphism & Halftone Layer Simulation */
+.matrix-glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 250, 108, 0.1);
+}
+
+.matrix-glass:hover {
+  border: 1px solid rgba(0, 250, 108, 0.4);
+  box-shadow: 0 0 30px rgba(0, 250, 108, 0.1);
+}
+
+/* 3D Spin Animation for the Logo */
+@keyframes spin3d {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+.animate-3d-logo {
+  animation: spin3d 8s linear infinite;
+  perspective: 1000px;
+}
