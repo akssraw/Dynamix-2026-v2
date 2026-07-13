@@ -1,43 +1,574 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Zap, ArrowUp } from 'lucide-react'
+import { ArrowRight, ArrowUp, X } from 'lucide-react'
 
-// 🟢 BRAND ASSET IMPORT: Change path if dropped directly inside your public/ folder
+// BRAND ASSET IMPORT
 import logoAsset from './assets/dynamix-logo.png'
 
-// 🟢 BOOT SOUND: drop your PS2 startup audio file into src/components (or src/assets)
-// and point this import at it — .mp3/.wav/.ogg all work fine with this setup.
+// BOOT SOUND
 import bootSound from './assets/ps2-boot.mp3'
 
 // Master Event Data Matrix
+
 const DX_2026_EVENTS = [
-  { id: 1, title: "Outcode Sr", mode: "Hybrid", venue: "Jr CS lab", category: "Coding", desc: "The premier senior programming layout tier tracking core architecture, algorithmic speeds, and system parsing optimization nodes." },
-  { id: 2, title: "Quest Sphere", mode: "Offline", venue: "Sr CS lab", category: "Quiz", desc: "A high-intensity technical quiz domain evaluating historical, structural, and emerging paradigms across modern global tech fields." },
-  { id: 3, title: "Joy n stick", mode: "Offline", venue: "Sr CS lab", category: "Gaming", desc: "Symmetric tactical arena reflexes. Head-to-head performance match tiers hosted across precision high-refresh client frameworks." },
-  { id: 4, title: "Overthink", mode: "Hybrid", venue: "Hall", category: "Cryptic", desc: "An asymmetric cryptography and deep pattern-matching challenge mapping system logic and hidden data tracks." },
-  { id: 5, title: "Crossword", mode: "Offline", venue: "Hall", category: "Quiz", desc: "High-contrast technical grid word-play parsing system vocabulary, computing lore, and technological terminology." },
-  { id: 6, title: "Council 8", mode: "Hybrid", venue: "Jr library", category: "MUN/Tech", desc: "A tech-policy simulation parsing emerging regulations, digital sovereignty, and ethical development protocols." },
-  { id: 7, title: "Cryptix (Inspect element)", mode: "Hybrid", venue: "School", category: "Web", desc: "A web security and client-side reverse-engineering sprint breaking down compilation targets and source vulnerabilities." },
-  { id: 8, title: "Pitch a Thon", mode: "Hybrid", venue: "—", category: "Startup", desc: "Founder framework pitching evaluating information architecture, unit scaling, and monetization paths for target automation pipelines." },
-  { id: 9, title: "Surprise", mode: "Offline", venue: "Physics lab", category: "Hardware", desc: "Unannounced hardware parameters. Competitors unbox undisclosed modules to solve physical engineering logic tasks on site." },
-  { id: 10, title: "AesthetiX", mode: "Hybrid", venue: "—", category: "Design", desc: "Digital design parameters tracking dark-theme styling layers, raw graphic layout rendering, and glassmorphism interface builds." },
-  { id: 11, title: "Click noise", mode: "Hybrid", venue: "School", category: "Photography", desc: "Digital layout asset capture evaluating lighting frameworks, high-contrast framing, and technical post-processing workflows." },
-  { id: 12, title: "Cliptica", mode: "Online", venue: "Discord", category: "Video", desc: "Video montage design tracking frame velocity alignment, tracking layers, and thematic audio-visual integration targets." },
-  { id: 13, title: "ShootIt", mode: "Hybrid", venue: "School", category: "Video", desc: "On-site production running from live dynamic cinematography guidelines straight to finished media delivery blocks." },
-  { id: 14, title: "Snapslide", mode: "Online", venue: "Discord", category: "Design", desc: "Rapid prototype deck creation tracking structural storytelling layouts and clean presentation typography parameters." },
-  { id: 15, title: "Pixel Pop", mode: "Online", venue: "Discord", category: "Art", desc: "Vector canvas rendering evaluating digital line work, high-saturation accents, and raw creative conceptualization targets." },
-  { id: 16, title: "LumoLuxe", mode: "Online", venue: "Discord", category: "Design", desc: "High-contrast render layout mechanics exploring simulated lighting behaviors and conceptual material maps." },
-  { id: 17, title: "Robosoccer", mode: "Offline", venue: "Badminton", category: "Robotics", desc: "Custom hardware mechanical locomotion loops contesting autonomous and real-time kinetic navigation controls." },
-  { id: 18, title: "Robowars", mode: "Offline", venue: "Badminton", category: "Robotics", desc: "High-impact custom combat robotics engineering loops built for kinetic durability and active structural disruption vectors." },
-  { id: 19, title: "WebD", mode: "Online", venue: "—", category: "Web", desc: "Full-stack client architecture design mapping custom layouts, reactive interface flows, and data layer bridges." }
+  {
+    id: 1,
+    title: "Pixel Pop",
+    mode: "ONLINE",
+    category: "Design",
+    venue: "Google Form Submission",
+    eligibility: "Classes: 1-2 (One participant from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#TUX PAINT",
+    desc: "Step into a world of colors and creativity as participants bring a given theme to life through vibrant digital artwork using the fun-filled Tux Paint application.",
+    details: [
+      "Participants must create the artwork using Tux Paint only.",
+      "Topic for prelims: 'My dream robot' or 'Flying cars in future'.",
+      "The drawing should be created during the competition time.",
+      "Use of Tux Paint tools such as Brushes, Shapes, Stamps, Magic Effects, Text, and Fill Colors is encouraged.",
+      "The artwork must be the participant's original creation.",
+      "Internet images, screenshots, or copied artwork are not allowed.",
+      "Parents/teachers may assist only in opening the software and submitting the file.",
+      "The final artwork should be saved and submitted in .jpg/.png format."
+    ],
+    guidelines: [
+      "All submissions must be original and plagiarism is strictly prohibited.",
+      "The organizer's decision regarding submissions and results shall be final and binding.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 2,
+    title: "Snap Slide",
+    mode: "ONLINE",
+    category: "Design",
+    venue: "Google Form Submission",
+    eligibility: "Classes: 3-4 (One participant from each class) | Teams: 1 (2 participants per team)",
+    hashtag: "#PRESENTATION",
+    desc: "A Snap Slide competition is where participants design and build a creative presentation on a given topic.",
+    details: [
+      "Participants will craft an engaging 7-8 slide PowerPoint (PRESENTATION) on the given topic, blending creativity, design, and impactful storytelling.",
+      "Topic for the event is: 'Smart Cities of the Future' or 'The Future Classroom'.",
+      "Use of Animations, Transitions, and Multimedia is allowed but must be appropriate.",
+      "Submissions must be in .pptx format.",
+      "The presentation must adhere to the topic.",
+      "The submission will be assessed on the basis of content, creativity and layout."
+    ],
+    guidelines: [
+      "All submissions must be original and plagiarism is strictly prohibited.",
+      "Use of any other app except PowerPoint is strictly prohibited.",
+      "The organizer's decision regarding submissions and results shall be final and binding.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 3,
+    title: "Lume Luxe",
+    mode: "ONLINE",
+    category: "Coding",
+    venue: "Google Form Submission",
+    eligibility: "Classes: 5 | Teams: 1 (2 participants per team)",
+    hashtag: "#SCRATCH",
+    desc: "Dive into the world of creativity and coding as participants use Scratch to design engaging projects on the given theme, turning innovative ideas into interactive digital experiences.",
+    details: [
+      "This is an online event. Entries to be submitted in the given link by July 20th, 2026, 11:59 pm.",
+      "File to be submitted in original format only (.sb3).",
+      "Topic for the event is: 'Future School Escape Room' or 'Robot Run 2050'."
+    ],
+    guidelines: [
+      "All submissions must be original and plagiarism is strictly prohibited.",
+      "The organiser's decision with regard to the submission and results be final and binding.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 4,
+    title: "Dreamscape",
+    mode: "ONLINE",
+    category: "Design",
+    venue: "Canva Submission",
+    eligibility: "Classes: 6-7 (One participant from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#CANVA",
+    desc: "Design and illustrate original conceptual layouts utilizing Canva software mechanics to visually communicate the core event themes without external automated generators.",
+    details: [
+      "Participants must create their design individually using Canva only.",
+      "The design should be an original creation and must not contain copyrighted or AI-generated content copied from external sources.",
+      "The final submission should be in PNG, JPG, or PDF format. Canva link also to be submitted.",
+      "Participants may use Canva templates, but the design should show significant customization and creativity.",
+      "The design must include a title and relevant visuals/text related to the chosen topic.",
+      "Topic: 'Think Before You Click (Internet Safety)' or 'My Dream Gaming World'."
+    ],
+    guidelines: [
+      "All submissions must be original and plagiarism is strictly prohibited.",
+      "Use of any other app except Canva is strictly prohibited.",
+      "The organiser's decision with regard to the submission and results be final and binding.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 5,
+    title: "Build It",
+    mode: "ONLINE",
+    category: "Web",
+    venue: "Prototype Submission Link",
+    eligibility: "Classes: 6-8 (Any class) | Teams: 1 (2 participants per team)",
+    hashtag: "#APP MAKING",
+    desc: "BuildIT is an exciting app development challenge that encourages young innovators to design practical digital solutions for real-world problems.",
+    details: [
+      "The app must be designed and developed by the participating students.",
+      "Topic: 'WasteWise' (An app that helps users segregate waste into recyclable, biodegradable and non-biodegradable categories) OR 'Accessible World' (An app designed to assist elderly or differently abled people with daily based tasks and reminders).",
+      "Working Prototype Required: The app should have at least 3-4 functional screens.",
+      "Submission Requirements: App project file (.aia/.apk or equivalent) and a 3-5 minute screen-recorded demo video explaining the problem addressed, key features, and a live demonstration.",
+      "AI tools not to be used.",
+      "Apps must not contain inappropriate, offensive, or copyrighted content.",
+      "Platform: MIT App Inventor, Thunkable, Kodular, App Lab, Scratch-based Apps, or any beginner-friendly app development platform."
+    ],
+    guidelines: [
+      "All submissions must be original and plagiarism is strictly prohibited.",
+      "The organiser's decision with regard to the submission and results be final and binding.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 6,
+    title: "Outcode Jr.",
+    mode: "ONLINE",
+    category: "Coding",
+    venue: "Online Judging Platform",
+    eligibility: "Classes: 7-8 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#CODING",
+    desc: "Get ready for a thrilling coding challenge where surprises await at every stage! With unexpected tasks, logic-based twists, and real-time problem solving, participants must think fast, code smart, and adapt quickly to conquer the unknown.",
+    details: [
+      "Participants will solve a set of algorithmic and logical programming problems within a specified time limit.",
+      "Problems will assess logical reasoning, data structures, algorithms, mathematics, and problem-solving skills.",
+      "Teams may submit solutions in any programming language supported by the competition platform.",
+      "The competition will be conducted on school-provided laptops.",
+      "Rankings will be determined based on the number of problems solved.",
+      "The decisions of the judges and organizers regarding scoring, rankings, and contest matters shall be final."
+    ],
+    guidelines: [
+      "The organiser's decision with regard to the submission and results be final and binding.",
+      "Participants may use only the resources and software authorized by the organizers.",
+      "AI tools, communication platforms, external storage devices, and unauthorized software are prohibited. Any violation will result in immediate disqualification.",
+      "Solutions must be submitted through the designated online judging platform.",
+      "Contest details, including duration and platform information, will be shared with registered teams prior to the event."
+    ]
+  },
+  {
+    id: 7,
+    title: "Meme Code",
+    mode: "ONLINE",
+    category: "Design",
+    venue: "Google Form Submission",
+    eligibility: "Classes: 7-9 (Participant from any class) | Teams: 1 (2 participants per team)",
+    hashtag: "#THE EDUCATIONAL TECH MEME CHALLENGE",
+    desc: "MemeCode is a creative digital competition that combines humour with learning, prompting students to merge comedic themes with core computing concepts.",
+    details: [
+      "Participants will create and submit one original educational tech meme based on any one of the prescribed themes.",
+      "The meme should combine humour with an informative message related to technology.",
+      "Format: JPEG or PNG | Canvas Size: Minimum 1080 x 1080 pixels (square format preferred) | Language: English.",
+      "The meme may be created using digital design tools, presentation software, illustration apps, or photo-editing platforms.",
+      "Topic: 'The \"I'll Fix It Tomorrow\" Programmer' or 'The Secret Thoughts of a Computer'."
+    ],
+    guidelines: [
+      "The meme must be the original work of the participant.",
+      "It should be humorous while maintaining educational value and appropriate language.",
+      "Offensive, discriminatory, political, defamatory, or inappropriate content will lead to disqualification.",
+      "Copyrighted images, templates, or artwork should not be used.",
+      "Participants must not use AI-based design tools and final presentation should reflect their own creativity.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 8,
+    title: "Infogra Fix",
+    mode: "ONLINE",
+    category: "Design",
+    venue: "Google Form Submission",
+    eligibility: "Classes: 7-9 (Participant from any class) | Teams: 1 (2 participants per team)",
+    hashtag: "#THE TECH INFOGRAPHIC CHALLENGE",
+    desc: "InfograFix is a digital design competition that challenges students to transform complex technology concepts into visually appealing and easy-to-understand infographics.",
+    details: [
+      "Participants will create and submit one original infographic explaining the given topic.",
+      "Format: PDF, JPEG, or PNG | Size: A3 (Portrait or Landscape) preferred | Language: English.",
+      "The infographic should include a clear title, relevant visuals/icons/illustrations, and brief explanatory text.",
+      "Must feature facts, statistics, timelines, processes, or comparisons (where applicable) and References/Web Sources.",
+      "Topic: '3D Printing: Printing the Future' or 'How Hackers Trick People: Understanding Phishing'."
+    ],
+    guidelines: [
+      "The infographic must be the original work of the participant.",
+      "Participants may use digital design tools such as Canva, PowerPoint, Google Slides, or similar applications.",
+      "AI-assisted design tools must not be used.",
+      "Copyrighted images, graphics, or icons should not be used.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 9,
+    title: "Prompt Craft",
+    mode: "ONLINE",
+    category: "Coding",
+    venue: "Discord / Google Form Node",
+    eligibility: "Classes: 8-9 (One participant from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#PROMPT AI ENGINEERING",
+    desc: "Prompt Craft is an AI Prompt Engineering competition that challenges students to communicate effectively with Artificial Intelligence tools by designing clear, creative, and well-structured prompts.",
+    details: [
+      "Participants will receive a set of themes/topics at the beginning of the competition via Discord.",
+      "They will be required to create effective prompts for the given task using any AI chatbot or generative AI tool available to them.",
+      "Participants may refine and improve their prompts through multiple iterations during the allotted time.",
+      "Final submission must include: The final prompt used and the AI-generated output. Final submission to be done within one hour."
+    ],
+    guidelines: [
+      "The time for event will start as the topic is released on Discord and the Google Form will stop accepting responses exactly one hour after that.",
+      "Participants may use any AI tool such as ChatGPT, Gemini, Copilot, Claude, or other similar platforms.",
+      "Internet connectivity and device arrangements shall be the responsibility of the participating schools/student.",
+      "Previously prepared prompts, templates, or saved prompt libraries are not permitted.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 10,
+    title: "Reel Tech",
+    mode: "ONLINE",
+    category: "Video",
+    venue: "Video Submission Portal",
+    eligibility: "Classes: 8-10 (Participant from any class) | Teams: 1 (2 participants per team)",
+    hashtag: "#THE TECH REEL CHALLENGE",
+    desc: "ReelTech is a short video creation competition that encourages students to communicate complex technological ideas or myths through engaging and impactful vertical reels.",
+    details: [
+      "Participants will create and submit a 60-second original reel/video based on any one of the prescribed themes.",
+      "Video Specifications: Duration: 45-60 seconds | Orientation: Vertical (9:16 ratio) preferred | Format: MP4 | Resolution: Minimum 720p | Language: English or Hindi.",
+      "Participants may use voice-over, on-screen text, animations, photographs, live-action footage, screen recordings, or a combination of these.",
+      "Topic: 'Believe, Build, Achieve' or 'Tech Myths Busted!'."
+    ],
+    guidelines: [
+      "The reel/video must be the original creation of the participant.",
+      "Copyrighted music, videos, images, or other media should not be used.",
+      "AI-based tools must not be used.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 11,
+    title: "Teach Scribe",
+    mode: "ONLINE",
+    category: "Design",
+    venue: "PDF Document Upload Node",
+    eligibility: "Classes: 8-9 (Any class) | Teams: 1 (2 participants per team)",
+    hashtag: "#THE TECHNICAL BLOGGING CHALLENGE",
+    desc: "TechScribe is a technical blogging competition that provides students with a platform to express their ideas, opinions, and insights on emerging technologies through engaging and informative writing.",
+    details: [
+      "Topic: 'The Next Big Tech Revolution' or 'Young Innovators Changing the World'.",
+      "Blog Specifications: Word Limit: 600-1000 words | Language: English | Format: PDF document.",
+      "Font parameters: Times New Roman or Calibri, Font Size: 12 pt, Line Spacing: 1.5.",
+      "The blog must include: Title of the Blog, Participant's Name, Class, School Name, Introduction, Main Content, Conclusion, and References/Web Sources."
+    ],
+    guidelines: [
+      "The blog must be the original work of the participant.",
+      "Plagiarism and direct copying from websites, books, blogs, or AI-generated articles are strictly prohibited.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 12,
+    title: "Cliptica",
+    mode: "ONLINE",
+    category: "Video",
+    venue: "Discord Resource Vault",
+    eligibility: "Classes: 9-10 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#VIDEO EDITING",
+    desc: "Unleash your imagination and transform the provided raw video clips into a visually captivating masterpiece through the art of post-production structural synchronization.",
+    details: [
+      "Participants can use any editing software of their choice.",
+      "Clips will be provided on the Discord server.",
+      "Topics will be announced on the Discord server on July 13."
+    ],
+    guidelines: [
+      "Only the provided clips may be used; additional footage is not permitted unless specified.",
+      "Basic editing techniques such as transitions, color correction, text overlays, sound effects, and background music are allowed.",
+      "All audio, music, and visual elements used must be copyright-free or properly credited.",
+      "Entries must be submitted in MP4 format.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 13,
+    title: "Web D",
+    mode: "ONLINE",
+    category: "Web",
+    venue: "GitHub Repository Core",
+    eligibility: "Classes: 9-10 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#WEB DEVELOPMENT",
+    desc: "Participants will design and develop an innovative, fully functional web-based solution based on the given theme, blending creativity with responsive programming technologies.",
+    details: [
+      "Prompts will be released on Discord on July 13.",
+      "Any web development technology or framework may be used.",
+      "The website should demonstrate originality, creativity, usability, and responsive design.",
+      "Use of AI-generated code is not permitted.",
+      "Submission Requirements: Source Code Folder / GitHub Repository Link, Live Website Link (if hosted), 2-3 minute demonstration video, and brief project documentation (PDF)."
+    ],
+    guidelines: [
+      "The project must be created by the participating team and should not be copied from existing sources.",
+      "All media assets used must be copyright-free or properly credited.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 14,
+    title: "Aesthetix",
+    mode: "ONLINE",
+    category: "Design",
+    venue: "Design Suite Target",
+    eligibility: "Classes: 9-10 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#DESIGNING",
+    desc: "From striking digital art and powerful posters to futuristic UI mockups—create visuals that inspire, engage, and leave a lasting impact through manual manipulation layouts.",
+    details: [
+      "Allowed software: Photoshop, Canva, Illustrator, CorelDRAW, or any open-source design software.",
+      "Originality is key—all designs must be created manually by the participants.",
+      "AI tools are strictly prohibited.",
+      "Top 5 teams will qualify for the offline final round.",
+      "Final submissions must be in high-resolution PNG, JPG, or PDF format."
+    ],
+    guidelines: [
+      "All artwork must be original and created by the participating team.",
+      "Plagiarism or submission of previously published work will result in immediate disqualification.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 15,
+    title: "*Click* Noice",
+    mode: "ONLINE",
+    category: "Video",
+    venue: "Discord Upload Arena",
+    eligibility: "Classes: 9-12 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#PHOTOGRAPHY (DSLR/MIRRORLESS)",
+    desc: "Tell a story through your lens. Use the power of raw optics photography to capture moments that speak louder than baseline computational rules.",
+    details: [
+      "Participants must capture and submit original photographs using a DSLR or Mirrorless camera only.",
+      "The competition theme will be announced on the official Discord server.",
+      "Submissions must be in .JPG, .JPEG, or RAW format.",
+      "Basic post-processing (cropping, exposure, contrast, and color correction) is permitted; excessive manipulation, compositing, or AI-generated elements are not allowed.",
+      "Photographs must not contain watermarks, borders, signatures, or identifying marks.",
+      "Participants should retain the original RAW file, as it may be requested for verification."
+    ],
+    guidelines: [
+      "Plagiarism or use of images captured by someone else will lead to immediate disqualification.",
+      "The decision of the judges and organizers will be final and binding.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 16,
+    title: "Quest Sphere",
+    mode: "OFFLINE",
+    category: "Gaming",
+    venue: "Discord (Prelims) / Gaming PC Lab (Finals)",
+    eligibility: "Classes: 11-12 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#GAMING PC",
+    desc: "Enter the ultimate gaming battleground where only the sharpest players survive! Packed with intense competition, unexpected twists, and mystery games from multiple genres.",
+    details: [
+      "There will be different games for each round, which will be announced a day prior on the Discord server.",
+      "The teams need to be a part of the Discord server during the online round of the event for announcements and instructions.",
+      "Top 6 teams will qualify for the final offline round.",
+      "Fair play is mandatory; the use of cheats, hacks, exploits, or unauthorized third-party software will result in immediate disqualification.",
+      "Participants must ensure a stable internet connection and access to a gaming PC/laptop for prelims."
+    ],
+    guidelines: [
+      "Matches will be conducted according to the rules of the selected game.",
+      "Any form of misconduct, abusive language, or unsportsmanlike behavior will not be tolerated.",
+      "The decision of the organizers and referees will be final and binding."
+    ]
+  },
+  {
+    id: 17,
+    title: "Overthink",
+    mode: "HYBRID",
+    category: "Quiz",
+    venue: "Discord Core / Main Auditorium",
+    eligibility: "Classes: 11-12 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#QUIZ",
+    desc: "A thrilling tech quiz where logic drives every question and knowledge leads the way, keeping participants curious till the answers unfold.",
+    details: [
+      "The details of the event will be shared on the Discord server. Top 6 teams will qualify for the offline final round.",
+      "The quiz will comprise multiple-choice, image-based, audio-visual, and logical reasoning questions.",
+      "Questions will cover topics such as Technology, Computers, Artificial Intelligence, Cyber Security, Science, Current Affairs, Gaming, and General Knowledge.",
+      "Multiple exciting rounds including Buzzer Round, Visual Round, Rapid Fire, Connect-the-Clues, and Surprise Challenge Round.",
+      "Use of unfair means, external assistance, AI tools, or unauthorized resources during the quiz is strictly prohibited."
+    ],
+    guidelines: [
+      "In case of a tie, additional tie-breaker questions may be conducted.",
+      "Teams will be judged on accuracy, speed, teamwork, and analytical thinking.",
+      "The decision of the quiz masters and organizers will be final and binding."
+    ]
+  },
+  {
+    id: 18,
+    title: "Pitch-A-Thon",
+    mode: "HYBRID",
+    category: "Quiz",
+    venue: "Discord / On-Site Arena",
+    eligibility: "Classes: 9-12 (Participant from any class) | Teams: 1 (2 participants per team)",
+    hashtag: "#IDEA PITCHING",
+    desc: "Turn ideas into innovation as teams conceptualize and deliver compelling startup-style pitches based on the given prompt, covering market models, strategies, and scalability.",
+    details: [
+      "Presentation duration: 5-7 minutes, followed by an engaging Q&A session with the judges.",
+      "Use of visual aids, prototypes, and live demonstrations is mandatory.",
+      "Prompts and all the other details will be released on Discord."
+    ],
+    guidelines: [
+      "Any updates or clarifications regarding the event will be conveyed through the Discord server.",
+      "Organizers' decisions are absolute and binding across all pipeline valuations."
+    ]
+  },
+  {
+    id: 19,
+    title: "Shoot It",
+    mode: "HYBRID",
+    category: "Video",
+    venue: "On-Site Production Grid",
+    eligibility: "Classes: 9-12 (One participant from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#MOVIE MAKING",
+    desc: "Unleash your imagination and design a cinematic runtime narrative tracking specific societal concepts through original production loops.",
+    details: [
+      "Topic: 'Voices Unheard' or 'Breaking the silence'.",
+      "Top 6 teams will qualify for the offline presentation round.",
+      "Films must follow the given theme and tell a compelling story.",
+      "All content must be original; third-party music or assets require proper credits.",
+      "Submissions must have clear visuals and audible sound. Films can be in Hindi or English or bilingual; subtitles must be given.",
+      "In the offline round, teams will present their films, explain their creative process and insights, and answer questions."
+    ],
+    guidelines: [
+      "Judging will consider scriptwriting, cinematography, acting, editing, and music production.",
+      "Offensive, misleading, discriminatory, or inappropriate content will lead to disqualification.",
+      "The file name should be in the format: EventName_SchoolName_ParticipantName."
+    ]
+  },
+  {
+    id: 20,
+    title: "Outcode Sr.",
+    mode: "HYBRID",
+    category: "Coding",
+    venue: "Vite Execution Systems Lab",
+    eligibility: "Classes: 11-12 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#CODING",
+    desc: "Step into an intense coding showdown where every challenge is a surprise waiting to be cracked! With unpredictable twists, logic-driven tasks, and real-time problem solving.",
+    details: [
+      "Participants will solve a set of algorithmic and logical programming problems within a specified time limit.",
+      "Problems will assess logical reasoning, data structures, algorithms, mathematics, and problem-solving skills.",
+      "Teams may submit solutions in any programming language supported by the competition platform.",
+      "The competition will be conducted on school-provided laptops.",
+      "Rankings will be determined based on the number of problems solved."
+    ],
+    guidelines: [
+      "Participants may use only the resources and software authorized by the organizers.",
+      "AI tools, communication platforms, external storage devices, and unauthorized software are prohibited. Any violation will result in immediate disqualification.",
+      "Solutions must be submitted through the designated online judging platform.",
+      "The organizers reserve the right to inspect systems and contest logs in cases of suspected malpractice."
+    ]
+  },
+  {
+    id: 21,
+    title: "Joy-N-Stick",
+    mode: "OFFLINE",
+    category: "Gaming",
+    venue: "Discord / Console Sandbox Enclosure",
+    eligibility: "Classes: 11-12 (One participant from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#GAMING CONSOLE",
+    desc: "Gear up for an electrifying gaming showdown where every match is a battle for glory! Face thrilling challenges across multiple console genres in an ultimate fight to seize the trophy.",
+    details: [
+      "Different games will be played in each round, announced a day prior on the Discord server.",
+      "Teams must be present on the Discord server during the online round of the event.",
+      "Top 6 teams will qualify for the final offline round.",
+      "Be prepared for diverse gaming genres, fast reflexes, and team coordination."
+    ],
+    guidelines: [
+      "Updates will be provided natively on the Discord Server platform.",
+      "Misconduct or unfair software tampering results in a structural platform wipe/ban."
+    ]
+  },
+  {
+    id: 22,
+    title: "Cryptx",
+    mode: "HYBRID",
+    category: "Coding",
+    venue: "Discord Server Hunt Pipeline",
+    eligibility: "Classes: 11-12 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#CRYPTIC HUNT",
+    desc: "Cryptic Hunt is an exciting hybrid Capture The Flag (CTF) challenge that tests participants' logical thinking, advanced online research skills, and cybersecurity decoding concepts.",
+    details: [
+      "The 'Capture The Flag (CTF)' event will be hosted online on the Discord server.",
+      "The online hunt will be 48 hours long.",
+      "Participants will face challenging levels that require skills ranging from basic Google searches to advanced problem-solving and decoding.",
+      "Top 6 teams will qualify for the final round, which will take place offline at RIS, RKP."
+    ],
+    guidelines: [
+      "Hints/Leads will be provided dynamically on the Discord Server core.",
+      "Collusion between teams leads to instant computational disqualification."
+    ]
+  },
+  {
+    id: 23,
+    title: "Surprise",
+    mode: "OFFLINE",
+    category: "Quiz",
+    venue: "Physics Laboratory Deck",
+    eligibility: "Classes: 11-12 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#SURPRISE",
+    desc: "Dare to enter the unknown! Packed with unexpected twists, mind-bending hardware/software challenges, and thrilling surprise tasks. No warnings. No shortcuts.",
+    details: [
+      "The event format and task will be revealed on the spot.",
+      "Top 6 teams will qualify for the final round.",
+      "Participants must be ready for anything—logic, creativity, tech, or even a mix of everything!",
+      "Time, rules, and judging criteria will be announced at the start.",
+      "Quick thinking and teamwork will be the key to success."
+    ],
+    guidelines: [
+      "Any updates or clarifications regarding the event will be communicated through the Discord server.",
+      "Malpractice assessment sweeps will run continuously over system logs."
+    ]
+  },
+  {
+    id: 24,
+    title: "Robo Soccer",
+    mode: "OFFLINE",
+    category: "Robotics",
+    venue: "Badminton Court Enclosure",
+    eligibility: "Classes: 9-10 (One participant from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#ROBOTICS",
+    desc: "Gear up for a high-intensity robotic football showdown where precision, control, and mechanical teamwork decide the champions! Design and command your bots to dominate the goals.",
+    details: [
+      "Size limit: 0.3m x 0.3m x 0.5m (+5cm) | Weight limit: 5kg (+0.1kg). Minimum 0.05m ground clearance for all parts.",
+      "Must be battery-powered, no battery capacity limit; with internal batteries only; no external power lines allowed.",
+      "Format: Knockout, 1v1 matches, approx. 3 minutes per game.",
+      "Robots must be team-built (no ready-made kits allowed), wheeled mechanics only (no humanoid or walking configurations)."
+    ],
+    guidelines: [
+      "All parts must meet event electrical and physical safety standards.",
+      "Any updates or clarifications regarding the rules will be communicated through the Discord server."
+    ]
+  },
+  {
+    id: 25,
+    title: "Robo Wars",
+    mode: "OFFLINE",
+    category: "Robotics",
+    venue: "Badminton Combat Grid Arena",
+    eligibility: "Classes: 11-12 (One from each) | Teams: 1 (2 participants per team)",
+    hashtag: "#ROBOTICS",
+    desc: "Enter the ultimate arena of steel and strategy where powerful bots clash in an adrenaline-fueled battle for dominance! Combine tactical durability engineering to disruptive disruption vectors.",
+    details: [
+      "Size limit: 0.4m x 0.4m x 0.6m (+5cm) | Weight limit: 10kg (+0.25kg). Minimum 0.05m ground clearance for all structural parts.",
+      "Must be battery-powered, no battery capacity limit; with internal batteries only; no external tether strings.",
+      "Format: Knockout, 3-4 player Free-For-All (FFA), 5-minute matches (2 x 2.5 mins + 30 seconds break); top 2 robots advance.",
+      "Robots must be completely team-designed (no pre-assembled retail kits), wheeled configurations only (no walking locomotion loops)."
+    ],
+    guidelines: [
+      "All parts must strictly pass the on-site technical inspection parameters before entering the enclosure grid.",
+      "Updates or logs will be shared directly on the Discord platform node."
+    ]
+  }
 ];
 
-// ──────────────────────────────────────────────────────────────
-// 🎯 LOGO TARGET-POINT SAMPLER
-// Renders the "ワメ 2026" mark to an offscreen canvas and samples the lit
-// pixels into point clouds. These points become the destination each matrix
-// character migrates toward, so the rain physically assembles the logo.
-// ──────────────────────────────────────────────────────────────
 type LogoPoint = { x: number; y: number };
 
 function generateLogoPoints(width: number, height: number): { white: LogoPoint[]; green: LogoPoint[]; bounds: { x: number; y: number; w: number; h: number } } {
@@ -51,12 +582,11 @@ function generateLogoPoints(width: number, height: number): { white: LogoPoint[]
   const cy = height / 2;
   const mainSize = Math.min(width, height) * 0.24;
   const yearSize = mainSize * 0.42;
-  const step = 3; // sampling density — lower = denser point cloud
+  const step = 3;
 
   octx.textAlign = 'center';
   octx.textBaseline = 'middle';
 
-  // Pass 1 — white glyph ("ワ") — pulled in tight against the accent glyph
   octx.clearRect(0, 0, width, height);
   octx.fillStyle = '#ffffff';
   octx.font = `bold ${mainSize}px system-ui`;
@@ -69,13 +599,12 @@ function generateLogoPoints(width: number, height: number): { white: LogoPoint[]
     }
   }
 
-  // Pass 2 — accent glyph + year ("メ" · "2026") — closer to the white glyph too
   octx.clearRect(0, 0, width, height);
   octx.fillStyle = '#00fa6c';
   octx.font = `bold ${mainSize}px system-ui`;
   octx.fillText('メ', cx + mainSize * 0.34, cy);
   octx.font = `bold ${yearSize}px monospace`;
-  octx.fillText('2026', cx + mainSize * 1.02, cy + mainSize * 0.05);
+  octx.fillText('2k26', cx + mainSize * 1.02, cy + mainSize * 0.05);
   const greenData = octx.getImageData(0, 0, width, height).data;
   const green: LogoPoint[] = [];
   for (let y = 0; y < height; y += step) {
@@ -84,8 +613,6 @@ function generateLogoPoints(width: number, height: number): { white: LogoPoint[]
     }
   }
 
-  // Re-center the whole cluster on the canvas — the year text makes the raw
-  // layout wider on the right, so without this the mark reads as off-axis.
   const all = [...white, ...green];
   let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
   all.forEach(p => {
@@ -122,10 +649,10 @@ const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 type AssemblyParticle = {
-  sx: number; sy: number;   // start (random matrix position)
-  tx: number; ty: number;   // target (logo pixel)
+  sx: number; sy: number;
+  tx: number; ty: number;
   color: 'white' | 'green';
-  delay: number;            // staggered start offset, seconds
+  delay: number;
   char: string;
 };
 
@@ -138,12 +665,8 @@ export default function App() {
   const heroCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const eventSectionRef = useRef<HTMLDivElement | null>(null);
   const bootAudioRef = useRef<HTMLAudioElement | null>(null);
-  const convergeStartRef = useRef<number | null>(null); // set the instant the first real gesture happens
+  const convergeStartRef = useRef<number | null>(null);
 
-  // 🎬 MATRIX RAIN (ambient, runs immediately) → LOGO CONVERGENCE (kicks in on first
-  // interaction). No gate UI — the rain just loops as wallpaper until the very first
-  // click/tap/key anywhere on the page, at which point audio.play() fires and the
-  // convergence timeline starts in that same instant, so they launch in sync.
   useEffect(() => {
     if (!isLoading) return;
     const canvas = loaderCanvasRef.current;
@@ -172,13 +695,12 @@ export default function App() {
     resizeLoader();
     window.addEventListener('resize', resizeLoader);
 
-    // Timeline (seconds, all relative to convergeStartRef — the interaction moment)
-    const T_GHOST_START = 1.0;    // faint outline preview begins forming
+    const T_GHOST_START = 1.0;
     const T_GHOST_FULL = 2.0;
-    const T_CONVERGE_START = 2.0; // characters begin migrating into the logo
-    const T_CONVERGE_DUR = 1.8;   // base duration before per-particle stagger
+    const T_CONVERGE_START = 2.0;
+    const T_CONVERGE_DUR = 1.8;
     const T_STAGGER_MAX = 0.5;
-    const T_HOLD_END = 4.8;       // logo sits solid + glowing
+    const T_HOLD_END = 4.8;
     const T_FLASH_END = 5.4;
     const T_TOTAL = 5.9;
 
@@ -192,7 +714,6 @@ export default function App() {
       chars: Array.from({ length: 22 }, () => String.fromCharCode(0x30a0 + Math.random() * 96))
     })).map((s, idx) => ({ ...s, col: idx, x: idx * colWidth }));
 
-    // Build the logo point cloud + assembly particles once we know canvas size
     const { white, green, bounds } = generateLogoPoints(canvas.width, canvas.height);
     const whiteSample = sampleCap(white, 1450);
     const greenSample = sampleCap(green, 1650);
@@ -200,7 +721,7 @@ export default function App() {
     const cy = canvas.height / 2;
     const maxDist = Math.sqrt(cx * cx + cy * cy);
 
-    const allTargets: { p: LogoPoint; color: 'white' | 'green' }[] = [
+    const allTargets = [
       ...whiteSample.map(p => ({ p, color: 'white' as const })),
       ...greenSample.map(p => ({ p, color: 'green' as const })),
     ];
@@ -219,14 +740,13 @@ export default function App() {
 
     const drawLoader = () => {
       const started = convergeStartRef.current;
-      const elapsed = started !== null ? (Date.now() - started) / 1000 : -1; // -1 = still ambient, pre-interaction
+      const elapsed = started !== null ? (Date.now() - started) / 1000 : -1;
 
       if (started !== null && elapsed >= T_TOTAL) {
         setIsLoading(false);
         return;
       }
 
-      // Matrix rain fades out as convergence progresses so the logo reads clearly
       let rainStrength = 1;
       if (elapsed > T_CONVERGE_START) {
         rainStrength = Math.max(0.12, 1 - (elapsed - T_CONVERGE_START) / (T_CONVERGE_DUR + 0.6));
@@ -235,7 +755,6 @@ export default function App() {
       ctx.fillStyle = `rgba(5, 5, 7, ${elapsed > T_CONVERGE_START ? 0.35 : 0.25})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Background matrix rain (unassigned columns) — continues falling, dimming over time
       streams.forEach((s) => {
         s.y += s.speed;
         if (s.y > canvas.height) s.y = -100;
@@ -249,7 +768,6 @@ export default function App() {
         }
       });
 
-      // Ghost outline preview — faint, sparse hint of the logo forming before the snap-together
       if (elapsed > T_GHOST_START) {
         const ghostT = Math.min(1, (elapsed - T_GHOST_START) / (T_GHOST_FULL - T_GHOST_START));
         const ghostAlpha = ghostT * 0.14;
@@ -263,7 +781,6 @@ export default function App() {
         }
       }
 
-      // Convergence — matrix characters migrate from random positions onto the logo
       if (elapsed > T_CONVERGE_START) {
         assembly.forEach((a) => {
           const localElapsed = elapsed - T_CONVERGE_START - a.delay;
@@ -275,24 +792,17 @@ export default function App() {
           const settled = t > 0.86;
 
           if (settled) {
-            // Locked in — render as a crisp solid pixel so logo edges stay clean
-            ctx.fillStyle = a.color === 'white'
-              ? `rgba(255,255,255,${0.9})`
-              : `rgba(0,250,108,${0.95})`;
+            ctx.fillStyle = a.color === 'white' ? `rgba(255,255,255,0.9)` : `rgba(0,250,108,0.95)`;
             ctx.fillRect(x - 1.5, y - 1.5, 3, 3);
           } else {
-            // Still in flight — render as a flickering matrix glyph
             if (Math.random() < 0.4) a.char = String.fromCharCode(0x30a0 + Math.random() * 96);
             ctx.font = '12px monospace';
-            ctx.fillStyle = a.color === 'white'
-              ? `rgba(255,255,255,${0.3 + eased * 0.6})`
-              : `rgba(0,250,108,${0.3 + eased * 0.6})`;
+            ctx.fillStyle = a.color === 'white' ? `rgba(255,255,255,${0.3 + eased * 0.6})` : `rgba(0,250,108,${0.3 + eased * 0.6})`;
             ctx.fillText(a.char, x, y);
           }
         });
       }
 
-      // Hold: gentle pulsing glow once fully formed
       if (elapsed > T_CONVERGE_START + T_CONVERGE_DUR + T_STAGGER_MAX && elapsed < T_HOLD_END) {
         const pulse = 0.5 + 0.5 * Math.sin((elapsed - T_CONVERGE_START) * 3);
         ctx.save();
@@ -304,7 +814,6 @@ export default function App() {
         ctx.restore();
       }
 
-      // Flash to white before handing off to the main site
       if (elapsed > T_HOLD_END) {
         const flashAlpha = Math.min(1, (elapsed - T_HOLD_END) / (T_FLASH_END - T_HOLD_END));
         ctx.fillStyle = `rgba(255, 255, 255, ${flashAlpha * 0.9})`;
@@ -322,6 +831,7 @@ export default function App() {
       cancelAnimationFrame(animId);
     };
   }, [isLoading]);
+
   useEffect(() => {
     if (isLoading) return;
     const canvas = heroCanvasRef.current;
@@ -451,12 +961,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#050507] text-neutral-200 selection:bg-[#00fa6c] selection:text-black antialiased relative">
       
-      {/* Always-mounted audio element so bootAudioRef.current is ready before any interaction */}
       <audio ref={bootAudioRef} src={bootSound} preload="auto" />
 
-      {/* Preloader — ambient matrix rain runs the instant this mounts, no gate needed.
-          The logo convergence + boot sound both arm on the page's first click/tap/key,
-          wherever it happens, since that's the earliest moment a browser allows audio. */}
       <AnimatePresence>
         {isLoading && (
           <motion.div 
@@ -469,11 +975,9 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* CORE FRAMEWORK INTERFACE */}
       {!isLoading && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
           
-          {/* Animated network particles flow continuously underneath all sections */}
           <canvas ref={heroCanvasRef} className="fixed inset-0 w-full h-full pointer-events-none z-0" />
 
           {/* FIRST VIEW: LANDING PANEL */}
@@ -481,62 +985,21 @@ export default function App() {
             <div className="text-center p-6 max-w-5xl mx-auto relative z-10 flex flex-col items-center justify-center">
               
               <motion.div
-  initial={{ opacity: 0, y: -10 }}
-  animate={{
-    opacity: 1,
-    y: [0, -5, 0],
-  }}
-  transition={{
-    opacity: { duration: 0.8 },
-    y: {
-      duration: 3.8,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  }}
-  className="mb-10"
->
-  <div className="relative inline-flex items-center justify-center">
-
-    {/* Cyan Glow */}
-    <div className="absolute inset-0 blur-3xl bg-cyan-400/20 rounded-full scale-150" />
-
-    {/* Pink Glow */}
-    <div className="absolute inset-0 blur-3xl bg-fuchsia-500/15 rounded-full scale-125" />
-
-    <span
-      className="text-[42px] leading-none font-black tracking-[-0.08em]"
-      style={{
-        fontFamily: "'Orbitron', sans-serif",
-        color: "#fff",
-        textShadow: `
-          0 0 6px #ffffff,
-          0 0 18px rgba(255,255,255,.8),
-          0 0 32px rgba(255,255,255,.45)
-        `,
-      }}
-    >
-      ワ
-    </span>
-
-    <span
-      className="text-[42px] leading-none font-black tracking-[-0.08em]"
-      style={{
-        fontFamily: "'Orbitron', sans-serif",
-        color: "#00fa6c",
-        textShadow: `
-          0 0 6px #00fa6c,
-          0 0 18px #00fa6c,
-          0 0 36px rgba(0,250,108,.9),
-          0 0 60px rgba(0,250,108,.45)
-        `,
-      }}
-    >
-      メ
-    </span>
-
-  </div>
-</motion.div>
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: [0, -5, 0] }}
+                transition={{
+                  opacity: { duration: 0.8 },
+                  y: { duration: 3.8, repeat: Infinity, ease: "easeInOut" }
+                }}
+                className="mb-10"
+              >
+                <div className="relative inline-flex items-center justify-center">
+                  <div className="absolute inset-0 blur-3xl bg-cyan-400/20 rounded-full scale-150" />
+                  <div className="absolute inset-0 blur-3xl bg-fuchsia-500/15 rounded-full scale-125" />
+                  <span className="text-[42px] leading-none font-black tracking-[-0.08em]" style={{ fontFamily: "'Orbitron', sans-serif", color: "#fff", textShadow: "0 0 6px #ffffff, 0 0 18px rgba(255,255,255,.8), 0 0 32px rgba(255,255,255,.45)" }}>ワ</span>
+                  <span className="text-[42px] leading-none font-black tracking-[-0.08em]" style={{ fontFamily: "'Orbitron', sans-serif", color: "#00fa6c", textShadow: "0 0 6px #00fa6c, 0 0 18px #00fa6c, 0 0 36px rgba(0,250,108,.9), 0 0 60px rgba(0,250,108,.45)" }}>メ</span>
+                </div>
+              </motion.div>
 
               <motion.div 
                 initial={{ opacity: 0, y: 15 }} 
@@ -544,23 +1007,27 @@ export default function App() {
                 transition={{ delay: 0.1 }}
                 className="flex items-center justify-center gap-4 mb-10 select-none pointer-events-none"
               >
-                <img 
-                  src={logoAsset} 
-                  alt="DynamiX Logo" 
-                  className="h-16 md:h-24 w-auto object-contain invert brightness-200 drop-shadow-[0_0_35px_rgba(255,255,255,0.15)]"
-                />
+                <img src={logoAsset} alt="DynamiX Logo" className="h-16 md:h-24 w-auto object-contain invert brightness-200 drop-shadow-[0_0_35px_rgba(255,255,255,0.15)]" />
                 <span className="text-4xl md:text-6xl font-mono font-bold tracking-tighter text-[#00fa6c] drop-shadow-[0_0_20px_rgba(0,250,108,0.4)] relative top-1 md:top-2 border-b-4 border-[#00fa6c] pb-1">
-                  2026
+                  2k26
                 </span>
               </motion.div>
 
-              <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="max-w-xl mx-auto text-sm md:text-base text-neutral-400 mb-12 font-normal leading-relaxed">
-               Twenty-five years of pushing boundaries.
-Twenty-five years of transforming ideas into reality.
-25 years of Dynamix.
-
-The journey continues with a celebration that honours our legacy while embracing the future.
-Coming Soon....
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="max-w-2xl mx-auto mb-12 text-sm md:text-base leading-loose text-[#8EFCC1] font-mono tracking-wide select-none"
+                style={{
+                  fontFamily: "'Share Tech Mono', 'IBM Plex Mono', 'JetBrains Mono', monospace",
+                  textShadow: "0 0 2px rgba(0,250,108,.35), 0 0 6px rgba(0,250,108,.20), 0 0 12px rgba(0,250,108,.08)"
+                }}
+              >
+                Twenty-five years of pushing boundaries.<br />
+                Twenty-five years of transforming ideas into reality.<br />
+                "25 years of Dynamix"<br /><br />
+                The journey continues with a celebration that honours our legacy while embracing the future.<br />
+                <span className="tracking-[0.25em] uppercase" style={{ color: "#00FA6C", textShadow: "0 0 4px rgba(0,250,108,.55), 0 0 10px rgba(0,250,108,.25)" }}>COMING SOON...</span>
               </motion.p>
 
               <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="relative inline-block group rounded">
@@ -575,14 +1042,13 @@ Coming Soon....
             </div>
           </div>
 
-          {/* SECOND VIEW: APPLE-STYLE HIGH-FIDELITY GLASSMORPHISM DASHBOARD */}
+          {/* DASHBOARD VIEW */}
           <div 
             ref={eventSectionRef} 
             className="min-h-screen border-t border-white/5 bg-transparent px-8 pt-24 pb-40 relative z-10"
           >
             <div className="max-w-6xl mx-auto">
               
-              {/* iOS Frosted Control Header Component */}
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-b border-white/10 pb-8 backdrop-blur-xl bg-white/[0.01] p-6 rounded-2xl border">
                 <div>
                   <h2 className="text-3xl font-mono font-bold text-white uppercase tracking-tight">Upcoming Events</h2>
@@ -605,10 +1071,11 @@ Coming Soon....
                 </div>
               </div>
 
-              {/* 🟢 NATIVE IPHONE GLASSMORPHISM CARDS GRID ARRAY */}
+              {/* CARDS DISPLAY CONTAINER */}
               <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 [column-fill:_balance] w-full items-start">
                 {filteredEvents.map((event) => (
-                  <div 
+                  <motion.div 
+                    layoutId={`card-container-${event.id}`}
                     key={event.id} 
                     onClick={() => setActiveEvent(event)}
                     className="break-inside-avoid mb-6 p-6 rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-[20px] backdrop-saturate-[160%] cursor-pointer transition-all duration-300 flex flex-col justify-between group transform hover:-translate-y-1 hover:border-white/[0.18] hover:bg-white/[0.06] hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
@@ -627,11 +1094,15 @@ Coming Soon....
                         {event.desc}
                       </p>
                     </div>
+                    
+                    {/* ABOUT BUTTON INTERACTION ANCHOR ROW */}
                     <div className="mt-5 pt-3 border-t border-white/[0.06] flex justify-between items-center text-[10px] font-mono text-neutral-400">
                       <span className="tracking-wide">LOC: {event.venue}</span>
-                      <span className="text-[#00fa6c] opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium tracking-widest">View →</span>
+                      <button className="px-3 py-1 rounded bg-[#00fa6c]/10 text-[#00fa6c] border border-[#00fa6c]/30 group-hover:bg-[#00fa6c] group-hover:text-black transition-all duration-300 tracking-widest uppercase font-bold text-[9px]">
+                        About →
+                      </button>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
@@ -647,21 +1118,50 @@ Coming Soon....
             </div>
           </div>
 
-          {/* HIGH-FIDELITY IPHONE SIDE OVERLAY PANEL CONSOLE */}
-          <div className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-xl transition-all duration-500 ease-in-out flex justify-end ${activeEvent ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
-            <div className={`w-full md:w-[540px] h-full bg-black/50 border-l border-white/[0.08] backdrop-blur-[30px] backdrop-saturate-[180%] p-12 overflow-y-auto relative transition-transform duration-500 flex flex-col justify-between ${activeEvent ? "translate-x-0" : "translate-x-full"}`}>
-              {activeEvent && (
-                <div className="relative z-10 flex flex-col h-full justify-between">
+          {/* 🟢 CENTERED EXPANDING HIGH-FIDELITY MODAL OVERLAY CONSOLE */}
+          <AnimatePresence>
+            {activeEvent && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6">
+                
+                {/* Backdrop Blur Layer */}
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setActiveEvent(null)}
+                  className="absolute inset-0 bg-black/60 backdrop-blur-md"
+                />
+
+                {/* Main Expanded Container */}
+                <motion.div 
+                  layoutId={`card-container-${activeEvent.id}`}
+                  className="relative w-full max-w-2xl bg-zinc-950/90 border border-white/10 backdrop-blur-2xl p-8 md:p-10 rounded-3xl z-10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] flex flex-col justify-between overflow-hidden"
+                >
+                  <button 
+                    onClick={() => setActiveEvent(null)}
+                    className="absolute top-6 right-6 p-2 rounded-full border border-white/10 bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10 transition-colors"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+
                   <div>
-                    <button onClick={() => setActiveEvent(null)} className="text-neutral-400 hover:text-white font-mono text-xs tracking-widest uppercase mb-12 flex items-center gap-2 transition-colors">← RETURN</button>
                     <div className="flex gap-2 mb-6">
-                      <span className="text-[10px] font-mono tracking-widest text-[#00fa6c] bg-[#00fa6c]/10 px-2.5 py-0.5 rounded-md border border-[#00fa6c]/20 uppercase">{activeEvent.category}</span>
-                      <span className="text-[10px] font-mono tracking-widest text-neutral-300 bg-white/[0.06] px-2.5 py-0.5 rounded-md border border-white/10 uppercase">{activeEvent.mode}</span>
+                      <span className="text-[10px] font-mono tracking-widest text-[#00fa6c] bg-[#00fa6c]/10 px-2.5 py-0.5 rounded-md border border-[#00fa6c]/20 uppercase">
+                        {activeEvent.category}
+                      </span>
+                      <span className="text-[10px] font-mono tracking-widest text-neutral-300 bg-white/[0.06] px-2.5 py-0.5 rounded-md border border-white/10 uppercase">
+                        {activeEvent.mode}
+                      </span>
                     </div>
-                    <h2 className="text-3xl font-mono font-bold text-white mb-6 uppercase tracking-tight">{activeEvent.title}</h2>
-                    <div className="space-y-6 text-neutral-200 text-sm leading-relaxed border-t border-b border-white/[0.08] py-8 my-8 font-light">
+
+                    <h2 className="text-3xl md:text-4xl font-mono font-bold text-white mb-6 uppercase tracking-tight">
+                      {activeEvent.title}
+                    </h2>
+
+                    <div className="space-y-6 text-neutral-300 text-sm md:text-base leading-relaxed border-t border-b border-white/[0.08] py-8 my-8 font-light">
                       <p>{activeEvent.desc}</p>
-                      <div className="grid grid-cols-2 gap-4 pt-4 font-mono text-xs text-neutral-300">
+                      
+                      <div className="grid grid-cols-2 gap-4 pt-4 font-mono text-xs text-neutral-400">
                         <div>
                           <span className="text-neutral-500 block uppercase mb-1">ASSIGNED VENUE</span>
                           <span className="text-white text-sm font-normal">{activeEvent.venue}</span>
@@ -673,13 +1173,23 @@ Coming Soon....
                       </div>
                     </div>
                   </div>
-                  <div className="pt-6">
-                    <button className="w-full py-4 rounded-xl bg-[#00fa6c] text-black font-mono font-bold uppercase tracking-widest text-xs hover:bg-white transition-colors duration-300 shadow-[0_10px_30px_rgba(0,250,108,0.2)]">EXECUTE_REGISTRATION_FLOW</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+
+                  <div className="pt-2">
+  <a 
+    href="https://forms.gle/2GBSW2pDjP6NVzzg8" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="block w-full"
+  >
+    <button className="w-full py-4 rounded-xl bg-[#00fa6c] text-black font-mono font-bold uppercase tracking-widest text-xs hover:bg-white transition-colors duration-300 shadow-[0_10px_30px_rgba(0,250,108,0.2)]">
+      REGISTER HERE
+    </button>
+  </a>
+</div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
 
         </motion.div>
       )}
